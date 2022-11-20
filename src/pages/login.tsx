@@ -21,13 +21,13 @@ export default function Login({ data }: any) {
         <Title order={1}>Bem vindo!</Title>
         <TextInput placeholder="Seu Email" radius={12} size="lg" />
         <PasswordInput placeholder="Senha" type="password" size="lg" radius={12} />
-        <Button variant="filled" color="blue" size="lg" radius={12}>
+        <Button variant="filled" size="lg" radius={12}>
           Login
         </Button>
         <Text size="xs" align="center">
           Não tem conta?{" "}
           <Link href="/">
-            <Anchor weight="bold" color="blue" component="span">
+            <Anchor weight="bold" component="span">
               Faça o cadastro
             </Anchor>
           </Link>

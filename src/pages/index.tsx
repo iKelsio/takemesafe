@@ -33,7 +33,7 @@ export default function Home({}: any) {
               alt=""
               withPlaceholder
             />
-            <Button leftIcon={<IconPlus />} color="blue" variant="subtle">
+            <Button leftIcon={<IconPlus />} variant="subtle">
               Criar novo roteiro
             </Button>
           </>
