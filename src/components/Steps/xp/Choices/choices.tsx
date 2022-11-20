@@ -2,7 +2,7 @@ import { Chip, Progress, Stack, Text, Title, createStyles } from "@mantine/core"
 import { useId } from "@mantine/hooks";
 import { useState } from "react";
 
-const useStyles = createStyles((theme, _params, getRef) => ({
+export const useStyles = createStyles((theme, _params, getRef) => ({
   label: {
     "&": {
       border: "none",
