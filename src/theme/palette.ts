@@ -5,9 +5,8 @@ export const palette: Palette = {
   black: "#000",
   primaryColor: "primary",
   colors: {
-    primary: Array.from(Array(9)).map((_) => "#006FFD") as any,
-    secondary: ["#ffac00"],
-    gray: ["#f9fafc", "#dadce6", "#696d80", "#717d8a", "#495057"],
-    brown: ["#883907", "#4a2108", "#1a0c03"],
+    primary: Array.from(Array(9))
+      .map((_) => "#057044")
+      .concat(["#D6F3E0"]) as any,
   },
 };

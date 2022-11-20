@@ -32,15 +32,6 @@ export default function Login({ data }: any) {
             </Anchor>
           </Link>
         </Text>
-        <Divider color="#D4D6DD" />
-        <Text size="xs" align="center">
-          ou entre com
-        </Text>
-        <Group align="center" m="0 auto">
-          {(["Facebook", "Twitter", "Google"] as IconName[]).map((name, i) => (
-            <Icon key={name.concat(`${i}`)} name={name} color="#006FFD" size={40} />
-          ))}
-        </Group>
       </Stack>
     </main>
   );
