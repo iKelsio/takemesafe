@@ -1,10 +1,7 @@
-import { GetStaticProps } from "next";
-import { amadeus } from "../services";
-
-export default function Home({ data }: any) {
+export default function Home({}: any) {
   return (
     <main>
-      <h1>HOME page</h1>
+      <h1>Home</h1>
     </main>
   );
 }

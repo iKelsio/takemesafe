@@ -1,10 +1,10 @@
-import { StrictMode } from "react";
+import styles from "./layout.module.scss";
 import { LayoutProps } from "./layout.types";
 
 export function Layout({ children }: LayoutProps) {
   return (
-    <StrictMode>
+    <div className={styles.view}>
       <>{children}</>
-    </StrictMode>
+    </div>
   );
 }
