@@ -1,1 +1,3 @@
-export interface CardProps {}
+export interface CardProps {
+  noImg?: boolean;
+}

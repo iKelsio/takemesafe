@@ -10,13 +10,13 @@ import { Time } from "./Time";
 export function Itineraries() {
   const id = useId("Itineraries");
   const [active, setActive] = useState(0);
-  const nextStep = () => setActive((current) => (current < 3 ? current + 1 : current));
+  const nextStep = () => setActive((current) => (current < 5 ? current + 1 : current));
   const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
 
   return (
     <Stack>
       <Group spacing={97.5} p={24}>
-        <Anchor>Cancelar</Anchor>
+        <Anchor fw="bold">Cancelar</Anchor>
         <Title order={5} align="center">
           Roteiro
         </Title>
@@ -33,7 +33,7 @@ export function Itineraries() {
           </Stepper.Step>
         ))}
       </Stepper>
-      {active !== 3 && (
+      {active !== 5 && (
         <Group position="center" mt="xl" px={24}>
           <Button radius={12} onClick={nextStep} fullWidth>
             Proximo

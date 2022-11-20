@@ -6,7 +6,7 @@ import { useStyles } from "../../xp/Choices";
 export function Place() {
   const id = useId();
   const { classes } = useStyles();
-  const [value, setValue] = useState<string[]>([]);
+  const [value, setValue] = useState<string>("");
 
   return (
     <Stack>
@@ -16,14 +16,13 @@ export function Place() {
           Defina onde ira começar seu próximo sonho
         </Text>
       </Stack>
-      <Chip.Group value={value} onChange={setValue} multiple w="100%" grow align="center">
+      <Chip.Group value={value} onChange={setValue} w="100%" grow align="center">
         <Stack spacing={30}>
           {["Montanhas", "Praia", "Aventuras", "Natureza"].map((text, i) => (
             <Chip
               key={id.concat(`${i}`)}
               classNames={classes}
               color="primary"
-              width="100%"
               radius={12}
               size="xl"
               value={text}>
