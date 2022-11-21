@@ -157,5 +157,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     props: {
       data: { pois, activities, itineraries: { data: itineraries, count: itineraries.length } },
     },
+    revalidate: 60,
   };
 };

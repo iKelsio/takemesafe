@@ -57,5 +57,5 @@ export const getStaticProps: GetStaticProps = async () => {
         .slice(0, 4);
     });
 
-  return { props: { activities } };
+  return { props: { activities }, revalidate: 60 };
 };
