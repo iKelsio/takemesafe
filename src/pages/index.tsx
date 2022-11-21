@@ -36,11 +36,19 @@ function HomeData({ pois, activities, itineraries }: any) {
       <Stack spacing={16}>
         <Title order={5}>Seus Roteiros</Title>
         {itineraries.count > 0 ? (
-          <>
+          <Stack spacing={10}>
             {(itineraries.data as Itinerary[]).slice(0, 3).map((itinerary) => (
               <Card key={itinerary.id} name={username} noImg it place={itinerary.place} />
             ))}
-          </>
+            <Button
+              leftIcon={<IconPlus />}
+              onClick={() => {
+                router.push("/itineraries");
+              }}
+              variant="subtle">
+              Criar novo roteiro
+            </Button>
+          </Stack>
         ) : (
           <>
             <Image
