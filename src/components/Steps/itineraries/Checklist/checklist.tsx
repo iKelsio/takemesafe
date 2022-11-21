@@ -16,10 +16,9 @@ export function Checklist({ activities }: any) {
         method: "POST",
         body: JSON.stringify(data),
       }).then(async (res) => res.json());
-
-      console.log(submit);
+      router.push("/");
     },
-    [data]
+    [data, router]
   );
 
   return (
