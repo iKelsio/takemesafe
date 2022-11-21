@@ -6,7 +6,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <>
       <Head>
-        <title></title>
+        <title>TakemeSafe</title>
       </Head>
       <div className={styles.view}>
         <>{children}</>
