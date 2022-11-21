@@ -1,10 +1,11 @@
 import { Box, Stack, Title, Text, Chip, Radio } from "@mantine/core";
 import { useId } from "@mantine/hooks";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Context } from "../../../../pages/itineraries";
 
 export function Budget() {
   const id = useId();
-  const [value, setValue] = useState<string>("Médio");
+  const [data, setData] = useContext(Context);
 
   return (
     <Stack>
@@ -14,7 +15,7 @@ export function Budget() {
           Quanto podemos investir nessa aventura?
         </Text>
       </Stack>
-      <Radio.Group value={value} onChange={setValue}>
+      <Radio.Group value={data.budget} onChange={(value) => setData("budget", value)}>
         <Stack spacing={30}>
           {[
             {
@@ -31,7 +32,7 @@ export function Budget() {
               color="primary"
               size="md"
               p={16}
-              bg={text.title === value ? "primary.9" : ""}
+              bg={text.title === data.budget ? "primary.9" : ""}
               sx={{ borderRadius: 12 }}
               label={
                 <Box

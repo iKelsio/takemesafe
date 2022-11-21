@@ -1,27 +1,23 @@
-import {
-  Button,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-  Anchor,
-  Divider,
-  Group,
-  Stack,
-} from "@mantine/core";
+import { Button, PasswordInput, Text, TextInput, Title, Anchor, Stack, Image } from "@mantine/core";
 import Link from "next/link";
-import { Icon, IconName } from "../components";
-import styles from "../styles/Login.module.scss";
+import { useRouter } from "next/router";
 
 export default function Login({ data }: any) {
+  const router = useRouter();
   return (
     <main>
-      <div className={styles.image} />
+      <Image src="/Login.png" withPlaceholder alt="" height={312} fit="contain" />
       <Stack py={40} px={24}>
         <Title order={1}>Bem vindo!</Title>
         <TextInput placeholder="Seu Email" radius={12} size="lg" />
         <PasswordInput placeholder="Senha" type="password" size="lg" radius={12} />
-        <Button variant="filled" size="lg" radius={12}>
+        <Button
+          variant="filled"
+          onClick={() => {
+            router.push("/");
+          }}
+          size="lg"
+          radius={12}>
           Login
         </Button>
         <Text size="xs" align="center">

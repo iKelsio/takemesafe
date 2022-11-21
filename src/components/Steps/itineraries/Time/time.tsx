@@ -1,11 +1,11 @@
 import { Box, Stack, Title, Text, Radio, Slider, Group } from "@mantine/core";
 import { useId } from "@mantine/hooks";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Context } from "../../../../pages/itineraries";
 
 export function Time() {
   const id = useId();
-  const [value, setValue] = useState<string>();
-  const [days, setDays] = useState<number>(1);
+  const [data, setData] = useContext(Context);
 
   return (
     <Stack>
@@ -16,14 +16,21 @@ export function Time() {
         </Text>
       </Stack>
       <Group>
-        <Slider step={1} max={15} min={1} value={days} onChange={setDays} w="75%" />
+        <Slider
+          step={1}
+          max={15}
+          min={1}
+          value={data.days}
+          onChange={(value) => setData("days", value)}
+          w="75%"
+        />
         <Text>
-          {days} dia{days > 1 ? "s" : ""}
+          {data.days} dia{data.days > 1 ? "s" : ""}
         </Text>
       </Group>
       <Title order={4}>Em qual temporada tem preferência?</Title>
 
-      <Radio.Group value={value} onChange={setValue} w="100%">
+      <Radio.Group value={data.weather} onChange={(value) => setData("weather", value)} w="100%">
         <Stack spacing={30}>
           {["Verão", "Inverno", "Outono", "Primavera"].map((text, i) => (
             <Radio key={id.concat(`${i}`)} color="primary" size="md" label={text} value={text} />

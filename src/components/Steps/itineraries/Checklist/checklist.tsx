@@ -1,9 +1,26 @@
-import { Stack, Title, Text, Image, Chip, Checkbox, Group, Textarea } from "@mantine/core";
+import { Stack, Title, Text, Image, Checkbox, Group, Textarea, Button } from "@mantine/core";
 import { Card } from "../../../../features";
-import { useState } from "react";
+import { FormEventHandler, useContext } from "react";
+import { Context } from "../../../../pages/itineraries";
+import { useCallback } from "react";
+import { useRouter } from "next/router";
 
-export function Checklist() {
-  const [value, setValue] = useState<string>();
+export function Checklist({ activities }: any) {
+  const router = useRouter();
+  const [data, setData] = useContext(Context);
+
+  const handleSubmit: FormEventHandler = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const submit = await fetch("/api/v1/data", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }).then(async (res) => res.json());
+
+      console.log(submit);
+    },
+    [data]
+  );
 
   return (
     <Stack>
@@ -15,17 +32,17 @@ export function Checklist() {
       </Stack>
 
       <Image
-        src={null}
+        src="/city.png"
         withPlaceholder
         alt=""
         radius={16}
         caption={
           <Stack align="flex-start" mt={24}>
             <Title order={4} color="black">
-              Sobre barcelona
+              Sobre {data.place}
             </Title>
             <Text align="left">
-              Contamos um pouco sobre a experiência de nossos viajantes em Barcelona, a cidade é
+              Contamos um pouco sobre a experiência de nossos viajantes em {data.place}, a cidade é
               conhecida por sua arte e arquitetura.
             </Text>
           </Stack>
@@ -36,7 +53,7 @@ export function Checklist() {
         <Text opacity={0.4} size="xs">
           A previsão é de dia ensolarados repletos de aventuras!
         </Text>
-        <Image alt="" src={null} withPlaceholder my={24} />
+        <Image alt="" src="/clouds.png" withPlaceholder my={24} />
       </Stack>
       <Stack mb={30} mt={20}>
         <Title order={4}>Cheklist de documentos importantes</Title>
@@ -44,7 +61,7 @@ export function Checklist() {
           Não esqueca de levar os seguintes documentos para sua viagem:
         </Text>
       </Stack>
-      <Checkbox.Group>
+      <Checkbox.Group value={data.docs} onChange={(value) => setData("docs", value)}>
         <Stack spacing={30}>
           {[
             "Documento de identificação",
@@ -60,15 +77,23 @@ export function Checklist() {
       <Stack>
         <Title order={4}>Experiências pra viver</Title>
         <Group noWrap sx={{ overflowX: "scroll" }}>
-          {Array.from(Array(10)).map((_, i) => (
-            <Card key={i ** 2} noImg />
+          {(activities as Array<Record<"name" | "description", string>>).map((activity) => (
+            <Card key={activity.name} noImg name={activity.name} txtBtn="Salvar Evento" />
           ))}
         </Group>
       </Stack>
-      <Stack>
-        <Title order={4}>Adicione observações para lembrar</Title>
-        <Textarea placeholder="Não se esqueça de...." radius={12} />
-      </Stack>
+      <form onSubmit={handleSubmit}>
+        <Stack>
+          <Title order={4}>Adicione observações para lembrar</Title>
+          <Textarea
+            placeholder="Não se esqueça de...."
+            radius={12}
+            value={data.obs}
+            onChange={(input) => setData("obs", input.target.value)}
+          />
+          <Button type="submit">Concluir Roteiro</Button>
+        </Stack>
+      </form>
     </Stack>
   );
 }

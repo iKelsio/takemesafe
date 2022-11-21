@@ -1,10 +1,11 @@
-import { Box, Stack, Title, Text, Radio, Checkbox } from "@mantine/core";
+import { Stack, Title, Text, Radio } from "@mantine/core";
 import { useId } from "@mantine/hooks";
-import { useState } from "react";
+import { useContext } from "react";
+import { Context } from "../../../../pages/itineraries";
 
 export function Place() {
   const id = useId();
-  const [value, setValue] = useState("");
+  const [data, setData] = useContext(Context);
 
   return (
     <Stack>
@@ -14,7 +15,12 @@ export function Place() {
           Defina onde ira começar seu próximo sonho
         </Text>
       </Stack>
-      <Radio.Group value={value} onChange={setValue} w="100%">
+      <Radio.Group
+        value={data.place}
+        onChange={(value) => {
+          setData("place", value);
+        }}
+        w="100%">
         <Stack spacing={30}>
           {["Barcelona", "Paris", "Lisboa", "Londres"].map((text) => (
             <Radio key={id.concat(text)} color="primary" size="md" value={text} label={text} />

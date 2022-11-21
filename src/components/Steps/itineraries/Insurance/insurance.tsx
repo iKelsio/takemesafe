@@ -13,11 +13,12 @@ import {
 } from "@mantine/core";
 import { useId } from "@mantine/hooks";
 import { IconStar } from "@tabler/icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Context } from "../../../../pages/itineraries";
 
 export function Insurance() {
   const id = useId();
-  const [value, setValue] = useState<string>("Total");
+  const [data, setData] = useContext(Context);
   const [days, setDays] = useState<number>(1);
 
   return (
@@ -32,21 +33,34 @@ export function Insurance() {
         </Text>
       </Stack>
 
-      <Radio.Group value={value} onChange={setValue} w="100%">
+      <Radio.Group
+        value={data.insurance}
+        onChange={(value) => {
+          setData("insurance", value);
+        }}
+        w="100%">
         <Stack spacing={30}>
           {[
             { name: "Total", discount: 10, price: "€ 94.80" },
-            { name: "Parcial", discount: 10, price: "€ 94.80" },
-            { name: "Mínimo", discount: 10, price: "€ 94.80" },
+            { name: "Parcial", discount: 5, price: "€ 70.90" },
+            { name: "Mínimo", discount: 0, price: "€ 45.90" },
           ].map((text, i) => (
-            <Card shadow="sm" p="md" key={id.concat(text.name)} radius="md" withBorder>
-              <Card.Section p="md" bg={text.name === value ? "primary.9" : ""}>
+            <Card
+              shadow="sm"
+              p="md"
+              key={id.concat(text.name)}
+              radius="md"
+              withBorder
+              onClick={() => setData("insurance", text.name)}>
+              <Card.Section p="md" bg={text.name === data.insurance ? "primary.9" : ""}>
                 <Box display="flex" sx={{ justifyContent: "space-between", alignItems: "center" }}>
                   <Group>
                     <Radio value={text.name} />
                     <Stack spacing={2}>
                       <Title order={5}>Seguro {text.name}</Title>
-                      <Text size="xs">{text.discount}% de desconto</Text>
+                      <Text size="xs">
+                        {text.discount > 0 ? `${text.discount}% de desconto` : ""}
+                      </Text>
                     </Stack>
                   </Group>
                   <Box>
@@ -57,7 +71,7 @@ export function Insurance() {
                   </Box>
                 </Box>
               </Card.Section>
-              <Collapse in={text.name === value}>
+              <Collapse in={text.name === data.insurance}>
                 <Group position="apart" mt="md" mb="xs" p={24}>
                   <Title order={4}>Esta opção inclui:</Title>
                   {[
