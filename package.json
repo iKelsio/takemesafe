@@ -48,5 +48,8 @@
   },
   "eslintConfig": {
     "extends": "next/core-web-vitals"
+  },
+  "prisma": {
+    "schema": "./src/external/repos/prisma/schema.prisma"
   }
 }

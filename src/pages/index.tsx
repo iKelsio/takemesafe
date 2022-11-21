@@ -1,18 +1,19 @@
 import { Button, Group, Image, Stack, Stepper, Text, Title } from "@mantine/core";
 import { useId } from "@mantine/hooks";
+import { Itinerary } from "@prisma/client";
 import { IconPlus } from "@tabler/icons";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Choices } from "../components/Steps/xp/Choices";
 import { Intro, NameForm } from "../components/Steps/xp/Intro";
+import { client } from "../external/repos/prisma";
 import { Card } from "../features";
 import { amadeus } from "../services";
 
-function HomeData({ pois, activities }: any) {
-  const has = false;
+function HomeData({ pois, activities, itineraries }: any) {
   const router = useRouter();
-  const [usename, setUsername] = useState("");
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const name = window?.localStorage?.getItem("username") || "Convidado";
@@ -22,7 +23,7 @@ function HomeData({ pois, activities }: any) {
   return (
     <Stack spacing={40} px={16} pb={10}>
       <Title pt={24} order={2}>
-        Bem vindo, {usename}!
+        Bem vindo, {username}!
       </Title>
       <Stack mb={40}>
         <Title order={5}>Recomendados</Title>
@@ -34,8 +35,12 @@ function HomeData({ pois, activities }: any) {
       </Stack>
       <Stack spacing={16}>
         <Title order={5}>Seus Roteiros</Title>
-        {has ? (
-          <></>
+        {itineraries.count > 0 ? (
+          <>
+            {(itineraries.data as Itinerary[]).slice(0, 3).map((itinerary) => (
+              <Card key={itinerary.id} name={username} noImg it place={itinerary.place} />
+            ))}
+          </>
         ) : (
           <>
             <Image
@@ -85,7 +90,11 @@ export default function Home({ data }: any) {
       <Stepper active={active} onStepClick={setActive}>
         {([Intro, NameForm, Choices, HomeData] as React.FC<any>[]).map((Component, i) => (
           <Stepper.Step key={id.concat(String(i))} hidden pt={0}>
-            <Component pois={data.pois} activities={data.activities} />
+            <Component
+              pois={data.pois}
+              activities={data.activities}
+              itineraries={data.itineraries}
+            />
           </Stepper.Step>
         ))}
       </Stepper>
@@ -116,6 +125,12 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       return response.data.map((poi: any) => ({ name: poi.name, type: poi.type })).slice(0, 4);
     });
 
+  const itineraries = await client.itinerary.findMany({
+    select: {
+      place: true,
+      days: true,
+    },
+  });
   const activities = await amadeus.shopping.activities
     .get({
       latitude: 41.397158,
@@ -131,6 +146,8 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     });
 
   return {
-    props: { data: { pois, activities } },
+    props: {
+      data: { pois, activities, itineraries: { data: itineraries, count: itineraries.length } },
+    },
   };
 };

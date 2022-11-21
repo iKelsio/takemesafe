@@ -1,0 +1,23 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Itinerary {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  place     String
+  budget    String
+  days      Int
+  weather   String
+  insurance String
+  docs      String[]
+  obs       String
+  createdAt DateTime @default(now()) @db.Timestamp()
+  updatedAt DateTime @default(now()) @db.Timestamp()
+
+  @@map("itineraries")
+}

@@ -3,4 +3,6 @@ export interface CardProps {
   name?: string;
   type?: string;
   txtBtn?: string;
+  place?: string;
+  it?: boolean;
 }
