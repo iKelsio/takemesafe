@@ -34,26 +34,30 @@ export function Insurance() {
 
       <Radio.Group value={value} onChange={setValue} w="100%">
         <Stack spacing={30}>
-          {["Total", "Parcial", "minimo"].map((text, i) => (
-            <Card shadow="sm" p="md" key={id.concat(String(i))} radius="md" withBorder>
-              <Card.Section p="md" bg={text === value ? "primary.9" : ""}>
+          {[
+            { name: "Total", discount: 10, price: "€ 94.80" },
+            { name: "Parcial", discount: 10, price: "€ 94.80" },
+            { name: "Mínimo", discount: 10, price: "€ 94.80" },
+          ].map((text, i) => (
+            <Card shadow="sm" p="md" key={id.concat(text.name)} radius="md" withBorder>
+              <Card.Section p="md" bg={text.name === value ? "primary.9" : ""}>
                 <Box display="flex" sx={{ justifyContent: "space-between", alignItems: "center" }}>
                   <Group>
-                    <Radio value={text} />
+                    <Radio value={text.name} />
                     <Stack spacing={2}>
-                      <Title order={5}>Seguro {text}</Title>
-                      <Text size="xs">10% de desconto</Text>
+                      <Title order={5}>Seguro {text.name}</Title>
+                      <Text size="xs">{text.discount}% de desconto</Text>
                     </Stack>
                   </Group>
                   <Box>
                     <Stack spacing={2}>
-                      <Title order={5}>€ 94.80l</Title>
+                      <Title order={5}>{text.price}</Title>
                       <Text size="xs">Por semana</Text>
                     </Stack>
                   </Box>
                 </Box>
               </Card.Section>
-              <Collapse in={text === value}>
+              <Collapse in={text.name === value}>
                 <Group position="apart" mt="md" mb="xs" p={24}>
                   <Title order={4}>Esta opção inclui:</Title>
                   {[

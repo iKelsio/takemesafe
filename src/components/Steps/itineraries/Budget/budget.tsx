@@ -1,12 +1,10 @@
-import { Box, Stack, Title, Text, Chip } from "@mantine/core";
+import { Box, Stack, Title, Text, Chip, Radio } from "@mantine/core";
 import { useId } from "@mantine/hooks";
 import { useState } from "react";
-import { useStyles } from "../../xp/Choices";
 
 export function Budget() {
   const id = useId();
-  const { classes } = useStyles();
-  const [value, setValue] = useState<string[]>([]);
+  const [value, setValue] = useState<string>("Médio");
 
   return (
     <Stack>
@@ -16,22 +14,48 @@ export function Budget() {
           Quanto podemos investir nessa aventura?
         </Text>
       </Stack>
-      <Chip.Group value={value} onChange={setValue} multiple w="100%" grow align="center">
+      <Radio.Group value={value} onChange={setValue}>
         <Stack spacing={30}>
-          {["Alto", "Médio", "Baixo"].map((text, i) => (
-            <Chip
-              key={id.concat(`${i}`)}
-              classNames={classes}
+          {[
+            {
+              title: "Alto",
+              description: "Ideal",
+              price: "€ 1000-1500",
+              per: "Por Semana",
+            },
+            { title: "Médio", description: "Economico", price: "€ 700-1300", per: "Por Semana" },
+            { title: "Baixo", description: "Sustentavel", price: "€ 500-1000", per: "Por Semana" },
+          ].map((text) => (
+            <Radio
+              key={id.concat(text.title)}
               color="primary"
-              radius={12}
-              size="xl"
-              value={text}>
-              <Text>{text.toUpperCase()}</Text>
-              {text}
-            </Chip>
+              size="md"
+              p={16}
+              bg={text.title === value ? "primary.9" : ""}
+              sx={{ borderRadius: 12 }}
+              label={
+                <Box
+                  display="flex"
+                  sx={{
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 95,
+                  }}>
+                  <Stack>
+                    <Title order={5}>{text.title}</Title>
+                    <Text>{text.description}</Text>
+                  </Stack>
+                  <Stack>
+                    <Title order={5}>{text.price}</Title>
+                    <Text>{text.per}</Text>
+                  </Stack>
+                </Box>
+              }
+              value={text.title}
+            />
           ))}
         </Stack>
-      </Chip.Group>
+      </Radio.Group>
     </Stack>
   );
 }

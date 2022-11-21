@@ -4,7 +4,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { useRef } from "react";
 
 export function Intro() {
-  const autoplay = useRef(Autoplay({ delay: 2000 }));
+  const autoplay = useRef(Autoplay({ delay: 3000 }));
 
   return (
     <Stack>
@@ -24,9 +24,9 @@ export function Intro() {
             },
           },
         }}>
-        {Array.from(Array(4)).map((_, i) => (
+        {["/Onboarding 1", "/Onboarding 2", "/Onboarding 3"].map((url, i) => (
           <Carousel.Slide key={`${i}:`}>
-            <Image src={null} withPlaceholder alt="" height={506} />
+            <Image src={url.concat(".png")} withPlaceholder alt="" height={506} />
           </Carousel.Slide>
         ))}
       </Carousel>

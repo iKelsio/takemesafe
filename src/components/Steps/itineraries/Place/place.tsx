@@ -1,12 +1,10 @@
-import { Box, Stack, Title, Text, Chip } from "@mantine/core";
+import { Box, Stack, Title, Text, Radio, Checkbox } from "@mantine/core";
 import { useId } from "@mantine/hooks";
 import { useState } from "react";
-import { useStyles } from "../../xp/Choices";
 
 export function Place() {
   const id = useId();
-  const { classes } = useStyles();
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState("");
 
   return (
     <Stack>
@@ -16,22 +14,13 @@ export function Place() {
           Defina onde ira começar seu próximo sonho
         </Text>
       </Stack>
-      <Chip.Group value={value} onChange={setValue} w="100%" grow align="center">
+      <Radio.Group value={value} onChange={setValue} w="100%">
         <Stack spacing={30}>
-          {["Montanhas", "Praia", "Aventuras", "Natureza"].map((text, i) => (
-            <Chip
-              key={id.concat(`${i}`)}
-              classNames={classes}
-              color="primary"
-              radius={12}
-              size="xl"
-              value={text}>
-              <Text>{text.toUpperCase()}</Text>
-              {text}
-            </Chip>
+          {["Barcelona", "Paris", "Lisboa", "Londres"].map((text) => (
+            <Radio key={id.concat(text)} color="primary" size="md" value={text} label={text} />
           ))}
         </Stack>
-      </Chip.Group>
+      </Radio.Group>
     </Stack>
   );
 }

@@ -1,17 +1,34 @@
-import { Box, Button, Group, Image, Stack, Text, Title } from "@mantine/core";
+import { Button, Group, Image, Stack, Stepper, Text, Title } from "@mantine/core";
+import { useId } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons";
+import { GetStaticProps } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Choices } from "../components/Steps/xp/Choices";
+import { Intro, NameForm } from "../components/Steps/xp/Intro";
 import { Card } from "../features";
-export default function Home({}: any) {
+import { amadeus } from "../services";
+
+function HomeData({ pois, activities }: any) {
   const has = false;
+  const router = useRouter();
+  const [usename, setUsername] = useState("");
+
+  useEffect(() => {
+    const name = window?.localStorage?.getItem("username") || "Convidado";
+    setUsername(name);
+  }, []);
 
   return (
     <Stack spacing={40} px={16} pb={10}>
-      <Title pt={24}>Oie, Matheus</Title>
+      <Title pt={24} order={2}>
+        Bem vindo, {usename}!
+      </Title>
       <Stack mb={40}>
         <Title order={5}>Recomendados</Title>
         <Group noWrap sx={{ overflowX: "scroll" }}>
-          {Array.from(Array(10)).map((_, i) => (
-            <Card key={i ** 2} />
+          {(pois as { name: string; type: string }[]).map((data) => (
+            <Card key={data.name} name={data.name} type={data.type} txtBtn="Ver Roteiro" />
           ))}
         </Group>
       </Stack>
@@ -33,7 +50,12 @@ export default function Home({}: any) {
               alt=""
               withPlaceholder
             />
-            <Button leftIcon={<IconPlus />} variant="subtle">
+            <Button
+              leftIcon={<IconPlus />}
+              onClick={() => {
+                router.push("/itineraries");
+              }}
+              variant="subtle">
               Criar novo roteiro
             </Button>
           </>
@@ -42,11 +64,73 @@ export default function Home({}: any) {
       <Stack>
         <Title order={5}>Nas suas proximidades</Title>
         <Group noWrap sx={{ overflowX: "scroll" }}>
-          {Array.from(Array(10)).map((_, i) => (
-            <Card key={i ** 2} />
+          {(activities as Array<Record<"name" | "description", string>>).map((activity) => (
+            <Card key={activity.name} noImg name={activity.name} txtBtn="Salvar Evento" />
           ))}
         </Group>
       </Stack>
     </Stack>
   );
 }
+export default function Home({ data }: any) {
+  const id = useId("Stepper");
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const isDone = window?.sessionStorage?.getItem("done");
+    if (Boolean(isDone)) setActive(3);
+  }, []);
+  const nextStep = () => setActive((current) => (current < 4 ? current + 1 : current));
+  return (
+    <main>
+      <Stepper active={active} onStepClick={setActive}>
+        {([Intro, NameForm, Choices, HomeData] as React.FC<any>[]).map((Component, i) => (
+          <Stepper.Step key={id.concat(String(i))} hidden pt={0}>
+            <Component pois={data.pois} activities={data.activities} />
+          </Stepper.Step>
+        ))}
+      </Stepper>
+      {active !== 3 && (
+        <Group position="center" mt="xl" px={24}>
+          <Button
+            radius={12}
+            onClick={() => {
+              nextStep();
+              if (active === 3) window.localStorage.setItem("done", "true");
+            }}
+            fullWidth>
+            Proximo
+          </Button>
+        </Group>
+      )}
+    </main>
+  );
+}
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  const pois = await amadeus.referenceData.locations.pointsOfInterest
+    .get({
+      latitude: 41.397158,
+      longitude: 2.160873,
+    })
+    .then((response: any) => {
+      return response.data.map((poi: any) => ({ name: poi.name, type: poi.type })).slice(0, 4);
+    });
+
+  const activities = await amadeus.shopping.activities
+    .get({
+      latitude: 41.397158,
+      longitude: 2.160873,
+    })
+    .then((response: any) => {
+      return response.data
+        .map((ativity: any) => ({
+          name: (ativity.name as string).substring(0, 25),
+          description: ativity.shortDescription || "",
+        }))
+        .slice(0, 4);
+    });
+
+  return {
+    props: { data: { pois, activities } },
+  };
+};
